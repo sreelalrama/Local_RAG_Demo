@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36804.6 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocalRAG", "LocalRAG.csproj", "{3B7D89A7-F49E-4986-8315-4A8647CACE0F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3B7D89A7-F49E-4986-8315-4A8647CACE0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B7D89A7-F49E-4986-8315-4A8647CACE0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B7D89A7-F49E-4986-8315-4A8647CACE0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B7D89A7-F49E-4986-8315-4A8647CACE0F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EBFBF8D7-7AAA-4403-B772-A3E3A773D462}
+	EndGlobalSection
+EndGlobal
