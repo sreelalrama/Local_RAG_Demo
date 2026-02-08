@@ -22,5 +22,12 @@ namespace LocalRAG
         {
            
         }
+
+        public int GetChunkCount()
+        {
+            using var cmd = _conn.CreateCommand();
+            cmd.CommandText = "SELECT COUNT(*) FROM chunks";
+            return Convert.ToInt32(cmd.ExecuteScalar());
+        }
     }
 }
