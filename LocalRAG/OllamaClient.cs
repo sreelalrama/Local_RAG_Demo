@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using static System.Net.WebRequestMethods;
 
@@ -42,6 +43,46 @@ namespace LocalRAG
         }
 
         // =============Embedding============
+
+        public async Task<float[]> GetEmbedding(string text)
+        {
+            var payload = new { model = _embeddingModel, prompt = text };
+
+            var request = new HttpRequestMessage(HttpMethod.Post, $"{_baseUrl}/api/embeddings")
+            {
+                Content = new StringContent(
+                    JsonSerializer.Serialize(payload),
+                    Encoding.UTF8,
+                    "application/json")
+            };
+
+            using var response = await _http.SendAsync(request);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var err = await response.Content.ReadAsStringAsync();
+                throw new Exception($"Ollama embeddings error {response.StatusCode}: {err}");
+            }
+
+            using var stream = await response.Content.ReadAsStreamAsync();
+            var json = await JsonSerializer.DeserializeAsync<JsonElement>(stream);
+
+            return json.GetProperty("embedding")
+                       .EnumerateArray()
+                       .Select(e => (float)e.GetDouble())
+                       .ToArray();
+        }
+
+
+        public async Task<float[][]> GetEmbeddings(IEnumerable<string> texts)
+        {
+            var results = new List<float[]>();
+            foreach (var text in texts)
+            {
+                results.Add(await GetEmbedding(text));
+            }
+            return results.ToArray();
+        }
 
         // ==============Chat Completion============
 
