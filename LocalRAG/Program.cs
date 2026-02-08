@@ -18,6 +18,7 @@ var chatModel = Env("CHAT_MODEL") ?? "tinyllama";
 var ollama = new OllamaClient(ollamaUrl, embeddingModel, chatModel);
 var chunker = new TextChunker(chunkSize: 512, overlap: 128);
 var store = new VectorStore(dbPath);
+var menu = new MenuHandler(ollama, chunker, store);
 
 // check ollama loacl server availability
 Console.WriteLine("\n  Checking Ollama server...");

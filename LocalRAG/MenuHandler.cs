@@ -8,6 +8,17 @@ namespace LocalRAG
 {
     internal class MenuHandler
     {
+        private OllamaClient ollama;
+        private TextChunker chunker;
+        private VectorStore store;
+
+        public MenuHandler(OllamaClient ollama, TextChunker chunker, VectorStore store)
+        {
+            this.ollama = ollama;
+            this.chunker = chunker;
+            this.store = store;
+        }
+
         public async Task MenuIngest()
         {
             Console.Write("\n  File or folder path (or press Enter for ./SampleDocs): ");
