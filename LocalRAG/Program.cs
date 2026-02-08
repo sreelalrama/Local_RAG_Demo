@@ -18,7 +18,7 @@ var chatModel = Env("CHAT_MODEL") ?? "tinyllama";
 var ollama = new OllamaClient(ollamaUrl, embeddingModel, chatModel);
 var chunker = new TextChunker(chunkSize: 512, overlap: 128);
 var store = new VectorStore(dbPath);
-var menu = new MenuHandler(ollama, chunker, store);
+var menuHandler = new MenuHandler(ollama, chunker, store);
 
 // check ollama loacl server availability
 Console.WriteLine("\n  Checking Ollama server...");
@@ -40,7 +40,7 @@ if (!await ollama.IsAvailable())
 }
 Console.WriteLine("  Ollama server is running.");
 
-// run the app menu and logic loop
+// ==================run the app menu and logic loop=======
 while (true)
 {
     Console.WriteLine();
@@ -59,8 +59,21 @@ while (true)
     Console.Write("  Choice: ");
 
     // get user input
-
+    var choice = Console.ReadLine()?.Trim();
     // handle choices
+    switch (choice)
+    {
+        case "1": await menuHandler.MenuIngest(); break;
+        case "2": await menuHandler.MenuQuery(); break;
+        case "3": menuHandler.MenuList(); break;
+        case "4": menuHandler.MenuClear(); break;
+        case "5":
+            Console.WriteLine("  Goodbye.");
+            return;
+        default:
+            Console.WriteLine("  Invalid choice.");
+            break;
+    }
 
 }
 

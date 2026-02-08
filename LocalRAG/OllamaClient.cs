@@ -85,7 +85,54 @@ namespace LocalRAG
         }
 
         // ==============Chat Completion============
+        public async Task<string> Chat(string question, string context)
+        {
+            var systemPrompt = """
+            You are a helpful assistant that answers questions based ONLY on the provided context.
+            If the context doesn't contain enough information to answer, say so.
+            Always cite which document(s) your answer comes from.
+            Keep answers concise and factual.
+            """;
 
+            var userMessage = $"""
+            Context:
+            {context}
+
+            Question: {question}
+            """;
+
+            var payload = new
+            {
+                model = _chatModel,
+                messages = new[]
+                {
+                new { role = "system", content = systemPrompt },
+                new { role = "user",   content = userMessage }
+            },
+                stream = false
+            };
+
+            var request = new HttpRequestMessage(HttpMethod.Post, $"{_baseUrl}/api/chat")
+            {
+                Content = new StringContent(
+                    JsonSerializer.Serialize(payload),
+                    Encoding.UTF8,
+                    "application/json")
+            };
+
+            using var response = await _http.SendAsync(request);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var err = await response.Content.ReadAsStringAsync();
+                throw new Exception($"Ollama chat error {response.StatusCode}: {err}");
+            }
+
+            using var stream = await response.Content.ReadAsStreamAsync();
+            var json = await JsonSerializer.DeserializeAsync<JsonElement>(stream);
+
+            return json.GetProperty("message").GetProperty("content").GetString() ?? "";
+        }
 
 
     }
